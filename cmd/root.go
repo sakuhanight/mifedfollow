@@ -70,6 +70,7 @@ var rootCmd = &cobra.Command{
 		// フォローするアカウントの現在のフォローリスト取得
 		followingRes, err := lib.Request(fmt.Sprintf("https://%s/api/users/following", destHost), map[string]interface{}{
 			"userId": userId,
+			"limit":  100,
 			"i":      destToken,
 		})
 		if err != nil {
@@ -129,8 +130,8 @@ var rootCmd = &cobra.Command{
 			for {
 				mt, message, err := c.ReadMessage()
 				if err != nil {
-					zap.S().Fatalf("read failed: %+v", err)
-					return
+					zap.S().Warnf("read failed: %+v", err)
+					break
 				}
 				zap.S().Debugf("recv: %s, type: %v", message, mt)
 				var msg struct {
@@ -250,6 +251,9 @@ func init() {
 
 	rootCmd.Flags().String("srcToken", "", "source token")
 	viper.BindPFlag("srcToken", rootCmd.Flags().Lookup("srcToken"))
+
+	rootCmd.Flags().Int("limit", 100, "following list limit")
+	viper.BindPFlag("limit", rootCmd.Flags().Lookup("limit"))
 }
 
 // initConfig reads in config file and ENV variables if set.
