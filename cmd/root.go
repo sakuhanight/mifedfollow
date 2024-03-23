@@ -46,7 +46,7 @@ var rootCmd = &cobra.Command{
 		destToken := viper.GetString("destToken")
 		srcHost := viper.GetString("srcHost")
 		srcToken := viper.GetString("srcToken")
-		tlChannel := viper.GetString("tlChannel")
+		tlChannel := viper.GetString("channel")
 
 		var following []string
 
@@ -254,6 +254,9 @@ func init() {
 
 	rootCmd.Flags().Int("limit", 100, "following list limit")
 	viper.BindPFlag("limit", rootCmd.Flags().Lookup("limit"))
+
+	rootCmd.Flags().String("channel", "globalTimeline", "timeline channel")
+	viper.BindPFlag("channel", rootCmd.Flags().Lookup("channel"))
 }
 
 // initConfig reads in config file and ENV variables if set.
